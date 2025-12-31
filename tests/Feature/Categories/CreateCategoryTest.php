@@ -13,7 +13,7 @@ test('authenticated users can create a category', function () {
         'name' => 'Food',
     ]);
 
-    $response->assertStatus(201);
+    $response->assertRedirect(route('categories.index'));
     $this->assertDatabaseHas('categories', [
         'name' => 'Food',
     ]);
