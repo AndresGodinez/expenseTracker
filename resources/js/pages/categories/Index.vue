@@ -13,6 +13,7 @@ type Category = {
 
 defineProps<{
     categories: Category[]
+    create_url: string
 }>()
 </script>
 
@@ -22,7 +23,7 @@ defineProps<{
             <div class="flex items-start justify-between gap-4">
                 <Heading title="Categories" description="Manage your expense categories" />
 
-                <Link :href="route('categories.create')" as="button">
+                <Link :href="create_url" as="button">
                     <Button size="sm">Create</Button>
                 </Link>
             </div>

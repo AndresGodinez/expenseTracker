@@ -71,6 +71,18 @@ php artisan migrate
 composer run dev
 ```
 
+Alternativamente (y útil para debug), en dos terminales:
+
+Terminal 1:
+```bash
+php artisan serve
+```
+
+Terminal 2:
+```bash
+npm run dev
+```
+
 ## Tests
 Ejecutar todos los tests:
 ```bash

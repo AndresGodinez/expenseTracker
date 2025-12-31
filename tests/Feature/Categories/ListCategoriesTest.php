@@ -26,6 +26,7 @@ test('authenticated users can view categories ordered by name', function () {
     $response->assertInertia(fn (Assert $page) => $page
         ->component('categories/Index')
         ->has('categories', 3)
+        ->where('create_url', route('categories.create', absolute: false))
         ->where('categories.0.name', 'Alpha')
         ->where('categories.0.edit_url', route('categories.edit', $alpha, absolute: false))
         ->where('categories.0.destroy_url', route('categories.destroy', $alpha, absolute: false))

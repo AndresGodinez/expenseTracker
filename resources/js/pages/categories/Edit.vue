@@ -15,6 +15,7 @@ type Category = {
 
 defineProps<{
     category: Category
+    index_url: string
 }>()
 </script>
 
@@ -26,7 +27,7 @@ defineProps<{
             <div class="flex items-start justify-between gap-4">
                 <Heading title="Edit category" description="Update the category name" />
 
-                <Link :href="route('categories.index')" as="button">
+                <Link :href="index_url" as="button">
                     <Button variant="secondary" size="sm">Back</Button>
                 </Link>
             </div>

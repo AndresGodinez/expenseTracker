@@ -23,6 +23,7 @@ class CategoryController extends Controller
 
         return Inertia::render('categories/Index', [
             'categories' => $categories,
+            'create_url' => route('categories.create', absolute: false),
         ]);
     }
 
@@ -30,6 +31,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('categories/Create', [
             'store_url' => route('categories.store', absolute: false),
+            'index_url' => route('categories.index', absolute: false),
         ]);
     }
 
@@ -50,6 +52,7 @@ class CategoryController extends Controller
                 'name' => $category->name,
                 'update_url' => route('categories.update', $category, absolute: false),
             ],
+            'index_url' => route('categories.index', absolute: false),
         ]);
     }
 

@@ -27,8 +27,38 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
   - Modelo: `app/Models/Category.php`
   - Validación con FormRequest: `app/Http/Requests/StoreCategoryRequest.php`
     - Reglas: `required|string|max:100|unique:categories,name`
-  - Controller: `app/Http/Controllers/CategoryController.php` (`store`)
-  - Ruta web: `POST /categories` -> `categories.store` (middleware `auth`)
+  - Controller: `app/Http/Controllers/CategoryController.php`
+  - Rutas web (middleware `auth`):
+    - `GET /categories` -> `categories.index`
+    - `GET /categories/create` -> `categories.create`
+    - `POST /categories` -> `categories.store`
+    - `GET /categories/{category}/edit` -> `categories.edit`
+    - `PUT /categories/{category}` -> `categories.update`
+    - `DELETE /categories/{category}` -> `categories.destroy`
+
+- CRUD de categorías (web + UI Inertia + tests):
+  - Listado ordenado por nombre:
+    - Test: `tests/Feature/Categories/ListCategoriesTest.php`
+    - Page: `resources/js/pages/categories/Index.vue`
+  - Crear categoría (pantalla + form):
+    - Test: `tests/Feature/Categories/CreateCategoryPageTest.php`
+    - Page: `resources/js/pages/categories/Create.vue`
+    - `store()` redirige a `categories.index` (flujo web)
+  - Editar/actualizar categoría:
+    - Test: `tests/Feature/Categories/UpdateCategoryTest.php`
+    - Request: `app/Http/Requests/UpdateCategoryRequest.php`
+    - Page: `resources/js/pages/categories/Edit.vue`
+  - Eliminar categoría:
+    - Test: `tests/Feature/Categories/DeleteCategoryTest.php`
+    - Acción desde el listado (botón Delete en `Index.vue`)
+
+- Notas de entorno (frontend):
+  - Fue necesario actualizar Node (Node 14 no soporta sintaxis moderna usada por Vite).
+  - Para desarrollo se requiere correr ambos procesos:
+    - `php artisan serve`
+    - `npm run dev`
+  - `@vite` en `resources/views/app.blade.php` debe incluir solo el entry (`resources/js/app.ts`).
+  - En páginas Vue de categorías se evitaron llamadas a `route()` del lado del cliente, pasando URLs desde el controller como props (por ejemplo: `create_url`, `index_url`).
 
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:

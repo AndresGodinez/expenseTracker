@@ -9,6 +9,7 @@ import { Form, Head, Link } from '@inertiajs/vue3'
 
 defineProps<{
     store_url: string
+    index_url: string
 }>()
 </script>
 
@@ -20,7 +21,7 @@ defineProps<{
             <div class="flex items-start justify-between gap-4">
                 <Heading title="Create category" description="Add a new category" />
 
-                <Link :href="route('categories.index')" as="button">
+                <Link :href="index_url" as="button">
                     <Button variant="secondary" size="sm">Back</Button>
                 </Link>
             </div>
