@@ -60,6 +60,32 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
   - `@vite` en `resources/views/app.blade.php` debe incluir solo el entry (`resources/js/app.ts`).
   - En páginas Vue de categorías se evitaron llamadas a `route()` del lado del cliente, pasando URLs desde el controller como props (por ejemplo: `create_url`, `index_url`).
 
+- CRUD de métodos de pago (PaymentMethod) siguiendo el mismo estándar de Category:
+  - DB/Modelo:
+    - Migración: `database/migrations/2025_12_31_000010_create_payment_methods_table.php`
+      - `payment_methods`: `id`, `name` (`string(29)`), `unique`, `active` (boolean default true), timestamps
+    - Modelo: `app/Models/PaymentMethod.php` (casts: `active` boolean)
+  - Validación con FormRequests:
+    - `app/Http/Requests/StorePaymentMethodRequest.php`
+    - `app/Http/Requests/UpdatePaymentMethodRequest.php` (unique ignorando el registro actual)
+  - Controller:
+    - `app/Http/Controllers/PaymentMethodController.php` (`index/create/store/edit/update/destroy`)
+    - `index()` ordenado por `name`
+    - `store/update/destroy` redirigen a `payment-methods.index` (flujo web)
+    - URLs para frontend se pasan como props (`*_url`) para evitar `route()` en Vue
+  - Rutas web (middleware `auth`) en `routes/web.php`:
+    - `payment-methods.index/create/store/edit/update/destroy`
+  - UI Inertia (Vue):
+    - `resources/js/pages/payment-methods/Index.vue`
+    - `resources/js/pages/payment-methods/Create.vue`
+    - `resources/js/pages/payment-methods/Edit.vue`
+  - Tests (Pest Feature):
+    - `tests/Feature/PaymentMethods/ListPaymentMethodsTest.php`
+    - `tests/Feature/PaymentMethods/CreatePaymentMethodPageTest.php`
+    - `tests/Feature/PaymentMethods/CreatePaymentMethodTest.php`
+    - `tests/Feature/PaymentMethods/UpdatePaymentMethodTest.php`
+    - `tests/Feature/PaymentMethods/DeletePaymentMethodTest.php`
+
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:
   - Dependencias del proyecto requieren **PHP >= 8.4**
