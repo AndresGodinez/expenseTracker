@@ -51,7 +51,7 @@ test('authenticated users can view incomes ordered by created_at desc', function
         ->where('incomes.data.0.edit_url', route('incomes.edit', $newer, absolute: false))
         ->where('incomes.data.0.destroy_url', route('incomes.destroy', $newer, absolute: false))
         ->where('incomes.data.1.name', 'Older')
-        ->where('page_total_amount', '30.00')
+        ->where('page_total_amount', '$30.00')
     );
 });
 
@@ -83,7 +83,7 @@ test('incomes index supports per_page pagination and includes per_page_options',
         ->where('per_page_options.1', 30)
         ->where('per_page_options.2', 50)
         ->where('per_page_options.3', 100)
-        ->where('page_total_amount', '15.00')
+        ->where('page_total_amount', '$15.00')
     );
 
     $response2 = $this->actingAs($user)->get(route('incomes.index', ['per_page' => 30]));
@@ -94,7 +94,7 @@ test('incomes index supports per_page pagination and includes per_page_options',
         ->component('incomes/Index')
         ->where('filters.per_page', 30)
         ->has('incomes.data', 16)
-        ->where('page_total_amount', '16.00')
+        ->where('page_total_amount', '$16.00')
     );
 });
 
@@ -141,6 +141,6 @@ test('incomes index can filter by category income and account and totals reflect
         ->where('filters.account_id', $accountA->id)
         ->has('incomes.data', 1)
         ->where('incomes.data.0.name', 'I1')
-        ->where('page_total_amount', '10.00')
+        ->where('page_total_amount', '$10.00')
     );
 });

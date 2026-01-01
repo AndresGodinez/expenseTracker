@@ -8,6 +8,7 @@ use App\Models\Account;
 use App\Models\CategoryIncome;
 use App\Models\Income;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use Inertia\Inertia;
 
 class IncomeController extends Controller
@@ -36,7 +37,7 @@ class IncomeController extends Controller
             ]);
 
         $pageTotal = $incomes->getCollection()->sum(fn (array $row) => (float) $row['amount']);
-        $pageTotalAmount = number_format($pageTotal, 2, '.', '');
+        $pageTotalAmount = '$'.str_replace(',', ' ', Number::format($pageTotal, 2));
 
         $categoryIncomes = CategoryIncome::query()->orderBy('name')->get(['id', 'name']);
         $accounts = Account::query()->orderBy('name')->get(['id', 'name']);
