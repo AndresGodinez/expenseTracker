@@ -15,7 +15,7 @@ defineProps<{
 <template>
     <Head :title="title" />
 
-    <div class="min-h-screen bg-white text-slate-900">
+    <div class="min-h-screen bg-slate-50 text-slate-900">
         <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
             <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
                 <div class="flex items-center gap-3">
@@ -56,8 +56,8 @@ defineProps<{
             </div>
         </header>
 
-        <main class="bg-gradient-to-b from-blue-50 via-white to-slate-50">
-            <div class="pointer-events-none absolute inset-x-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.18),transparent_55%)]" />
+        <main class="relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-slate-50">
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.22),transparent_60%)]" />
             <slot />
         </main>
 
