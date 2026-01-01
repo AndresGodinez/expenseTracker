@@ -205,6 +205,27 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
     - `tests/Feature/Incomes/UpdateIncomeTest.php`
     - `tests/Feature/Incomes/DeleteIncomeTest.php`
 
+- Cierre mensual (Monthly Reports) - snapshots + totales por categoría + email (testeado):
+  - DB:
+    - Migración: `database/migrations/2026_01_01_000070_create_monthly_reports_tables.php`
+      - `monthly_reports`: mes (`month_start`, `month_end`), totales (`total_expenses_amount`, `total_incomes_amount`)
+      - `monthly_report_expenses`: snapshot de expenses del mes
+      - `monthly_report_incomes`: snapshot de incomes del mes
+      - `monthly_report_expense_category_totals`: total de gastos por `category_id`
+      - `monthly_report_income_category_totals`: total de ingresos por `category_income_id`
+  - Job:
+    - `app/Jobs/GenerateMonthlyFinancialSummary.php`
+    - Se ejecuta el día 1, 00:00 y genera el corte del mes anterior
+    - Inserta snapshots + totales por categoría y actualiza `monthly_reports`
+  - Email:
+    - Mailable: `app/Mail/MonthlyFinancialSummaryMail.php`
+    - View: `resources/views/emails/monthly-financial-summary.blade.php`
+    - Contenido: "Has gastado ..." + desglose por categorías + total
+  - Scheduling:
+    - `routes/console.php` agenda el job con `monthlyOn(1, '00:00')`
+  - Tests (Pest Feature):
+    - `tests/Feature/MonthlyReports/GenerateMonthlyFinancialSummaryTest.php` (usa `Mail::fake()`; no requiere credenciales)
+
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:
   - Dependencias del proyecto requieren **PHP >= 8.4**
