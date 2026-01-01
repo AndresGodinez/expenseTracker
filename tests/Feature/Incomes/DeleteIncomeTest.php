@@ -6,16 +6,33 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('guests cannot delete incomes', function () {
-    $income = \App\Models\Income::create(['name' => 'Salary']);
+    $categoryIncome = \App\Models\CategoryIncome::create(['name' => 'Salary']);
+    $account = \App\Models\Account::create(['name' => 'Checking']);
+
+    $income = \App\Models\Income::create([
+        'name' => 'Salary',
+        'category_income_id' => $categoryIncome->id,
+        'amount' => '10.00',
+        'account_id' => $account->id,
+    ]);
 
     $response = $this->delete(route('incomes.destroy', $income));
 
     $response->assertRedirect(route('login'));
-})->skip('Legacy incomes scaffold replaced by category-incomes.');
+});
 
 test('authenticated users can delete incomes', function () {
     $user = User::factory()->create();
-    $income = \App\Models\Income::create(['name' => 'Salary']);
+
+    $categoryIncome = \App\Models\CategoryIncome::create(['name' => 'Salary']);
+    $account = \App\Models\Account::create(['name' => 'Checking']);
+
+    $income = \App\Models\Income::create([
+        'name' => 'Salary',
+        'category_income_id' => $categoryIncome->id,
+        'amount' => '10.00',
+        'account_id' => $account->id,
+    ]);
 
     $response = $this->actingAs($user)->delete(route('incomes.destroy', $income));
 
@@ -24,4 +41,4 @@ test('authenticated users can delete incomes', function () {
     $this->assertDatabaseMissing('incomes', [
         'id' => $income->id,
     ]);
-})->skip('Legacy incomes scaffold replaced by category-incomes.');
+});

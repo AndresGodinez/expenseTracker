@@ -8,18 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('name', 29)->unique();
-            $table->foreignId('category_income_id');
-            $table->decimal('amount', 8, 2);
-            $table->foreignId('account_id');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('accounts');
     }
 };

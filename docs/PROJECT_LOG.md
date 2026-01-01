@@ -120,6 +120,91 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
     - `tests/Feature/Expenses/UpdateExpenseTest.php`
     - `tests/Feature/Expenses/DeleteExpenseTest.php`
 
+- CRUD de categorías de ingresos (CategoryIncome) siguiendo el mismo estándar de Category:
+  - DB/Modelo:
+    - Migración: `database/migrations/2025_12_31_000040_create_category_incomes_table.php`
+      - `category_incomes`: `id`, `name` (`string(29)`), `unique`, timestamps
+    - Modelo: `app/Models/CategoryIncome.php`
+  - Validación con FormRequests:
+    - `app/Http/Requests/StoreCategoryIncomeRequest.php`
+    - `app/Http/Requests/UpdateCategoryIncomeRequest.php` (unique ignorando el registro actual)
+  - Controller:
+    - `app/Http/Controllers/CategoryIncomeController.php` (`index/create/store/edit/update/destroy`)
+    - `index()` ordenado por `name`
+    - `store/update/destroy` redirigen a `category-incomes.index`
+    - URLs para frontend se pasan como props (`*_url`) para evitar `route()` en Vue
+  - Rutas web (middleware `auth`) en `routes/web.php`:
+    - `category-incomes.index/create/store/edit/update/destroy`
+  - UI Inertia (Vue):
+    - `resources/js/pages/category-incomes/Index.vue`
+    - `resources/js/pages/category-incomes/Create.vue`
+    - `resources/js/pages/category-incomes/Edit.vue`
+  - Tests (Pest Feature):
+    - `tests/Feature/CategoryIncomes/ListCategoryIncomesTest.php`
+    - `tests/Feature/CategoryIncomes/CreateCategoryIncomePageTest.php`
+    - `tests/Feature/CategoryIncomes/CreateCategoryIncomeTest.php`
+    - `tests/Feature/CategoryIncomes/UpdateCategoryIncomeTest.php`
+    - `tests/Feature/CategoryIncomes/DeleteCategoryIncomeTest.php`
+
+- CRUD de cuentas (Account) siguiendo el mismo estándar de Category:
+  - DB/Modelo:
+    - Migración: `database/migrations/2025_12_31_000050_create_accounts_table.php`
+      - `accounts`: `id`, `name` (`string(29)`), `unique`, timestamps
+    - Modelo: `app/Models/Account.php`
+  - Validación con FormRequests:
+    - `app/Http/Requests/StoreAccountRequest.php`
+    - `app/Http/Requests/UpdateAccountRequest.php` (unique ignorando el registro actual)
+  - Controller:
+    - `app/Http/Controllers/AccountController.php` (`index/create/store/edit/update/destroy`)
+    - `index()` ordenado por `name`
+    - `store/update/destroy` redirigen a `accounts.index`
+    - URLs para frontend se pasan como props (`*_url`) para evitar `route()` en Vue
+  - Rutas web (middleware `auth`) en `routes/web.php`:
+    - `accounts.index/create/store/edit/update/destroy`
+  - UI Inertia (Vue):
+    - `resources/js/pages/accounts/Index.vue`
+    - `resources/js/pages/accounts/Create.vue`
+    - `resources/js/pages/accounts/Edit.vue`
+  - Tests (Pest Feature):
+    - `tests/Feature/Accounts/ListAccountsTest.php`
+    - `tests/Feature/Accounts/CreateAccountPageTest.php`
+    - `tests/Feature/Accounts/CreateAccountTest.php`
+    - `tests/Feature/Accounts/UpdateAccountTest.php`
+    - `tests/Feature/Accounts/DeleteAccountTest.php`
+
+- CRUD de ingresos (Income) siguiendo el mismo estándar (web + Inertia + Vue + TDD):
+  - DB/Modelo:
+    - Migración: `database/migrations/2025_12_31_000030_create_incomes_table.php`
+      - `incomes`: `id`, `name` (`string(29)` unique), `category_income_id` (required), `amount` (`decimal(8,2)`), `account_id` (required), timestamps
+    - Migración adicional (FKs): `database/migrations/2025_12_31_000060_add_income_foreign_keys.php`
+      - Agrega foreign keys a `category_incomes` y `accounts` (por orden de migraciones)
+    - Modelo: `app/Models/Income.php`
+      - `amount` casteado a `decimal:2`
+      - Relaciones: `categoryIncome()` y `account()`
+  - Validación con FormRequests:
+    - `app/Http/Requests/StoreIncomeRequest.php`
+    - `app/Http/Requests/UpdateIncomeRequest.php` (unique ignorando el registro actual)
+  - Controller:
+    - `app/Http/Controllers/IncomeController.php` (`index/create/store/edit/update/destroy`)
+    - Listado ordenado por `created_at` DESC (más recientes primero)
+    - Paginación configurable con `per_page` (default 15; opciones: 15/30/50/100)
+    - Filtros por `category_income_id` y `account_id`
+    - Se calcula y muestra `page_total_amount` (suma de `amount` de los elementos desplegados)
+    - `store/update/destroy` redirigen a `incomes.index`
+    - URLs para frontend se pasan como props (`*_url`) para evitar `route()` en Vue
+  - Rutas web (middleware `auth`) en `routes/web.php`:
+    - `incomes.index/create/store/edit/update/destroy`
+  - UI Inertia (Vue):
+    - `resources/js/pages/incomes/Index.vue`
+    - `resources/js/pages/incomes/Create.vue`
+    - `resources/js/pages/incomes/Edit.vue`
+  - Tests (Pest Feature):
+    - `tests/Feature/Incomes/ListIncomesTest.php`
+    - `tests/Feature/Incomes/CreateIncomePageTest.php`
+    - `tests/Feature/Incomes/CreateIncomeTest.php`
+    - `tests/Feature/Incomes/UpdateIncomeTest.php`
+    - `tests/Feature/Incomes/DeleteIncomeTest.php`
+
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:
   - Dependencias del proyecto requieren **PHP >= 8.4**
