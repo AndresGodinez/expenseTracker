@@ -226,6 +226,23 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
   - Tests (Pest Feature):
     - `tests/Feature/MonthlyReports/GenerateMonthlyFinancialSummaryTest.php` (usa `Mail::fake()`; no requiere credenciales)
 
+- Dashboard (KPIs MTD + gráfica Gastos vs Ingresos con Chart.js):
+  - Backend:
+    - Controller: `app/Http/Controllers/DashboardController.php`
+      - KPIs del mes en curso (MTD): gastos, ingresos, balance
+      - % de variación vs mes anterior (comparando contra el mismo rango de días)
+      - Serie diaria (MTD) para gráfica: `chart.labels`, `chart.expenses`, `chart.incomes`
+    - Ruta `dashboard` se movió a controller en `routes/web.php` (se mantiene `auth` + `verified`)
+  - UI Inertia (Vue):
+    - `resources/js/pages/Dashboard.vue`
+      - Cards de KPIs
+      - Gráfica de línea Gastos vs Ingresos usando `vue-chartjs` + `chart.js`
+  - Frontend deps:
+    - `chart.js`
+    - `vue-chartjs`
+  - Tests (Pest Feature):
+    - `tests/Feature/DashboardTest.php` (valida props Inertia para KPIs y serie diaria)
+
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:
   - Dependencias del proyecto requieren **PHP >= 8.4**
