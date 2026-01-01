@@ -21,5 +21,6 @@ require __DIR__.'/web/expenses.php';
 require __DIR__.'/web/category-incomes.php';
 require __DIR__.'/web/accounts.php';
 require __DIR__.'/web/incomes.php';
+require __DIR__.'/web/monthly-reports.php';
 
 require __DIR__.'/settings.php';
