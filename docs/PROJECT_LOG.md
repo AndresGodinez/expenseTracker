@@ -272,3 +272,25 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
 ### Diseño
 - Vistas de resumen (mensual)
 - Visualizaciones (por categoría)
+
+---
+
+## 2026-01-01
+### Cambios
+- Dashboard: mejoras “decisionales” (insights accionables)
+  - Backend: `DashboardController` ahora expone props adicionales:
+    - Comparativos MTD vs mes anterior (mismo rango de días): cambios en monto y % para gastos/ingresos/balance
+    - Top categorías de gasto del mes (top 10) con % del total + dataset para gráfica
+    - Tendencia 12 meses (gastos/ingresos/balance) basada en `monthly_reports`
+  - UI: `resources/js/pages/Dashboard.vue`
+    - Cards: ahora muestran monto + % vs mes anterior (cuando aplica)
+    - Gráficas:
+      - Barras horizontales: top categorías del mes
+      - Doughnut: distribución de gastos por categoría
+      - Línea: tendencia 12 meses (gastos/ingresos/balance)
+  - Tests: `tests/Feature/DashboardTest.php`
+    - Aserciones nuevas para props de top categorías y trend 12 meses
+
+### Documentación
+- Feature inventory:
+  - `features/docs/FEATURE_INVENTORY.md`

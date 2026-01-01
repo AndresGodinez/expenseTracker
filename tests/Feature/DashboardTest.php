@@ -4,6 +4,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Expense;
 use App\Models\Income;
+use App\Models\MonthlyReport;
 use Inertia\Testing\AssertableInertia as Assert;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -28,11 +29,27 @@ test('dashboard shows month-to-date KPIs and percent change vs previous month', 
     $this->actingAs($user);
 
     $categoryIncome = \App\Models\CategoryIncome::create(['name' => 'Salary']);
+    $food = \App\Models\Category::create(['name' => 'Food']);
     $account = \App\Models\Account::create(['name' => 'Checking']);
+
+    MonthlyReport::create([
+        'month_start' => '2026-01-01',
+        'month_end' => '2026-01-31',
+        'total_expenses_amount' => '20.00',
+        'total_incomes_amount' => '25.00',
+    ]);
+
+    MonthlyReport::create([
+        'month_start' => '2026-02-01',
+        'month_end' => '2026-02-28',
+        'total_expenses_amount' => '10.00',
+        'total_incomes_amount' => '50.00',
+    ]);
 
     $expenseCurrent = Expense::create([
         'name' => 'Current expense',
         'amount' => '10.00',
+        'category_id' => $food->id,
         'active' => true,
     ]);
     $expenseCurrent->timestamps = false;
@@ -77,11 +94,25 @@ test('dashboard shows month-to-date KPIs and percent change vs previous month', 
         ->where('kpis.mtd_expenses', '$10.00')
         ->where('kpis.mtd_incomes', '$50.00')
         ->where('kpis.mtd_balance', '$40.00')
+        ->where('kpis.mtd_expenses_change_amount', '$-10.00')
         ->where('kpis.mtd_expenses_change_percent', '-50.00%')
+        ->where('kpis.mtd_incomes_change_amount', '$25.00')
         ->where('kpis.mtd_incomes_change_percent', '+100.00%')
+        ->where('kpis.mtd_balance_change_amount', '$35.00')
+        ->where('kpis.mtd_balance_change_percent', '+700.00%')
         ->where('chart.labels.0', '2026-02-01')
         ->where('chart.labels.9', '2026-02-10')
         ->where('chart.expenses.4', 10)
         ->where('chart.incomes.2', 50)
+        ->where('top_expense_categories.0.category', 'Food')
+        ->where('top_expense_categories.0.total_amount', '$10.00')
+        ->where('top_expense_categories.0.percent', '+100.00%')
+        ->where('top_expense_categories_chart.labels.0', 'Food')
+        ->where('top_expense_categories_chart.totals.0', 10)
+        ->where('trend_12_months.labels.0', '2026-01-01')
+        ->where('trend_12_months.labels.1', '2026-02-01')
+        ->where('trend_12_months.expenses.0', 20)
+        ->where('trend_12_months.incomes.1', 50)
+        ->where('trend_12_months.balance.1', 40)
     );
 });

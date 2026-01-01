@@ -80,6 +80,12 @@ test('monthly financial summary job snapshots previous month data, stores catego
         'id' => $monthlyReportId,
         'total_expenses_amount' => '30.00',
         'total_incomes_amount' => '100.00',
+        'expenses_change_amount' => null,
+        'expenses_change_percent' => null,
+        'incomes_change_amount' => null,
+        'incomes_change_percent' => null,
+        'balance_change_amount' => null,
+        'balance_change_percent' => null,
     ]);
 
     $this->assertDatabaseCount('monthly_report_expenses', 2);

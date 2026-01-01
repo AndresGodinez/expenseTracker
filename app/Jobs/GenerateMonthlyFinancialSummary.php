@@ -24,6 +24,8 @@ class GenerateMonthlyFinancialSummary implements ShouldQueue
         $monthStart = $now->subMonthNoOverflow()->startOfMonth()->toDateString();
         $monthEnd = $now->subMonthNoOverflow()->endOfMonth()->toDateString();
 
+        $previousMonthStart = $now->subMonthsNoOverflow(2)->startOfMonth()->toDateString();
+
         $monthlyReportId = DB::table('monthly_reports')->where('month_start', $monthStart)->value('id');
 
         if ($monthlyReportId) {
@@ -111,9 +113,32 @@ class GenerateMonthlyFinancialSummary implements ShouldQueue
         $totalExpensesAmount = (float) DB::table('monthly_report_expenses')->where('monthly_report_id', $monthlyReportId)->sum('amount');
         $totalIncomesAmount = (float) DB::table('monthly_report_incomes')->where('monthly_report_id', $monthlyReportId)->sum('amount');
 
+        $previousReport = DB::table('monthly_reports')
+            ->where('month_start', $previousMonthStart)
+            ->first();
+
+        $currentBalance = $totalIncomesAmount - $totalExpensesAmount;
+        $previousExpenses = $previousReport ? (float) $previousReport->total_expenses_amount : null;
+        $previousIncomes = $previousReport ? (float) $previousReport->total_incomes_amount : null;
+        $previousBalance = $previousReport ? ((float) $previousReport->total_incomes_amount - (float) $previousReport->total_expenses_amount) : null;
+
+        $expensesChangeAmount = $previousExpenses === null ? null : ($totalExpensesAmount - $previousExpenses);
+        $incomesChangeAmount = $previousIncomes === null ? null : ($totalIncomesAmount - $previousIncomes);
+        $balanceChangeAmount = $previousBalance === null ? null : ($currentBalance - $previousBalance);
+
+        $expensesChangePercent = ($previousExpenses === null || $previousExpenses == 0.0) ? null : (($expensesChangeAmount / $previousExpenses) * 100);
+        $incomesChangePercent = ($previousIncomes === null || $previousIncomes == 0.0) ? null : (($incomesChangeAmount / $previousIncomes) * 100);
+        $balanceChangePercent = ($previousBalance === null || $previousBalance == 0.0) ? null : (($balanceChangeAmount / $previousBalance) * 100);
+
         DB::table('monthly_reports')->where('id', $monthlyReportId)->update([
             'total_expenses_amount' => $totalExpensesAmount,
             'total_incomes_amount' => $totalIncomesAmount,
+            'expenses_change_amount' => $expensesChangeAmount,
+            'expenses_change_percent' => $expensesChangePercent,
+            'incomes_change_amount' => $incomesChangeAmount,
+            'incomes_change_percent' => $incomesChangePercent,
+            'balance_change_amount' => $balanceChangeAmount,
+            'balance_change_percent' => $balanceChangePercent,
             'updated_at' => now(),
         ]);
 
