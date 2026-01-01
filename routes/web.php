@@ -6,8 +6,16 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return Inertia::render('Home', [
+        'can_register' => Features::enabled(Features::registration()),
+        'login_url' => route('login'),
+        'register_url' => route('register'),
+        'dashboard_url' => route('dashboard'),
+        'sales_email' => 'ventas@carvaz.com',
     ]);
 })->name('home');
 
