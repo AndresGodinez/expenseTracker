@@ -86,6 +86,40 @@ Este documento sirve como **contexto vivo** del proyecto. La idea es mantener aq
     - `tests/Feature/PaymentMethods/UpdatePaymentMethodTest.php`
     - `tests/Feature/PaymentMethods/DeletePaymentMethodTest.php`
 
+- CRUD de gastos (Expense) siguiendo el mismo estándar (web + Inertia + Vue + TDD):
+  - DB/Modelo:
+    - Migración: `database/migrations/2025_12_31_000020_create_expenses_table.php`
+      - `expenses`: `id`, `name` (`string(29)` unique), `amount` (`decimal(8,2)`),
+        `category_id` nullable (FK categories), `payment_method_id` nullable (FK payment_methods),
+        `active` (boolean default true), timestamps
+    - Modelo: `app/Models/Expense.php`
+      - `amount` casteado a `decimal:2`
+      - Relaciones: `category()` y `paymentMethod()`
+  - Validación con FormRequests:
+    - `app/Http/Requests/StoreExpenseRequest.php`
+    - `app/Http/Requests/UpdateExpenseRequest.php` (unique ignorando el registro actual)
+  - Controller:
+    - `app/Http/Controllers/ExpenseController.php` (`index/create/store/edit/update/destroy`)
+    - Listado ordenado por `created_at` DESC (más recientes primero)
+    - Paginación configurable con `per_page` (default 15; opciones: 15/30/50/100)
+    - Filtros por `category_id` y `payment_method_id`
+    - Se calcula y muestra `page_total_amount` (suma de `amount` de los elementos desplegados)
+    - `store/update/destroy` redirigen a `expenses.index`
+    - URLs para frontend se pasan como props (`*_url`) para evitar `route()` en Vue
+    - Nota técnica: `page_total_amount` se serializa como **string con 2 decimales** para evitar mismatches de tipo (int/float) en asserts estrictos de Inertia/Pest.
+  - Rutas web (middleware `auth`) en `routes/web.php`:
+    - `expenses.index/create/store/edit/update/destroy`
+  - UI Inertia (Vue):
+    - `resources/js/pages/expenses/Index.vue`
+    - `resources/js/pages/expenses/Create.vue`
+    - `resources/js/pages/expenses/Edit.vue`
+  - Tests (Pest Feature):
+    - `tests/Feature/Expenses/ListExpensesTest.php`
+    - `tests/Feature/Expenses/CreateExpensePageTest.php`
+    - `tests/Feature/Expenses/CreateExpenseTest.php`
+    - `tests/Feature/Expenses/UpdateExpenseTest.php`
+    - `tests/Feature/Expenses/DeleteExpenseTest.php`
+
 ### Notas
 - Al ejecutar tests, se detectó un bloqueo por versión de PHP:
   - Dependencias del proyecto requieren **PHP >= 8.4**
