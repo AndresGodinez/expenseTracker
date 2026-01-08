@@ -49,7 +49,7 @@ return new class extends Migration
             $table->decimal('total_amount', 12, 2);
             $table->timestamps();
 
-            $table->unique(['monthly_report_id', 'category_id']);
+            $table->unique(['monthly_report_id', 'category_id'], 'mre_cat_uq');
         });
 
         Schema::create('monthly_report_income_category_totals', function (Blueprint $table) {
@@ -59,7 +59,7 @@ return new class extends Migration
             $table->decimal('total_amount', 12, 2);
             $table->timestamps();
 
-            $table->unique(['monthly_report_id', 'category_income_id']);
+            $table->unique(['monthly_report_id', 'category_income_id'], 'mri_cat_uq');
         });
     }
 
