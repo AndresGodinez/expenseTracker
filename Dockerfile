@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine
 
-# Paquetes del sistema
+# Paquetes del sistema necesarios
 RUN apk add --no-cache \
     bash \
     curl \
@@ -14,12 +14,9 @@ RUN apk add --no-cache \
 # Extensiones PHP requeridas por Laravel 12
 RUN docker-php-ext-install \
     bcmath \
-    ctype \
-    fileinfo \
     mbstring \
     pdo \
     pdo_mysql \
-    tokenizer \
     xml \
     zip \
     intl
@@ -29,10 +26,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Mejor cache
+# Cache de dependencias
 COPY composer.json composer.lock ./
 
-# Laravel 12 en CI (sin scripts)
+# Instalar dependencias (modo CI)
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
