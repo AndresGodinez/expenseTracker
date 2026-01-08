@@ -3,63 +3,63 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { Bar, Doughnut, Line } from 'vue-chartjs'
 import {
-    Chart as ChartJS,
     ArcElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
     BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
     Title,
     Tooltip,
-    Legend,
-} from 'chart.js'
+} from 'chart.js';
+import { Bar, Doughnut, Line } from 'vue-chartjs';
 
 type Kpis = {
-    mtd_expenses: string
-    mtd_incomes: string
-    mtd_balance: string
-    mtd_expenses_change_amount: string | null
-    mtd_expenses_change_percent: string | null
-    mtd_incomes_change_amount: string | null
-    mtd_incomes_change_percent: string | null
-    mtd_balance_change_amount: string | null
-    mtd_balance_change_percent: string | null
-}
+    mtd_expenses: string;
+    mtd_incomes: string;
+    mtd_balance: string;
+    mtd_expenses_change_amount: string | null;
+    mtd_expenses_change_percent: string | null;
+    mtd_incomes_change_amount: string | null;
+    mtd_incomes_change_percent: string | null;
+    mtd_balance_change_amount: string | null;
+    mtd_balance_change_percent: string | null;
+};
 
 type DashboardChart = {
-    labels: string[]
-    expenses: number[]
-    incomes: number[]
-}
+    labels: string[];
+    expenses: number[];
+    incomes: number[];
+};
 
 type CategoryChart = {
-    labels: string[]
-    totals: number[]
-}
+    labels: string[];
+    totals: number[];
+};
 
 type TrendChart = {
-    labels: string[]
-    expenses: number[]
-    incomes: number[]
-    balance: number[]
-}
+    labels: string[];
+    expenses: number[];
+    incomes: number[];
+    balance: number[];
+};
 
 type TopCategoryRow = {
-    category: string
-    total_amount: string
-    percent: string | null
-}
+    category: string;
+    total_amount: string;
+    percent: string | null;
+};
 
 defineProps<{
-    kpis: Kpis
-    chart: DashboardChart
-    top_expense_categories: TopCategoryRow[]
-    top_expense_categories_chart: CategoryChart
-    trend_12_months: TrendChart
-}>()
+    kpis: Kpis;
+    chart: DashboardChart;
+    top_expense_categories: TopCategoryRow[];
+    top_expense_categories_chart: CategoryChart;
+    trend_12_months: TrendChart;
+}>();
 
 ChartJS.register(
     ArcElement,
@@ -71,7 +71,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-)
+);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -85,48 +85,73 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+        <div
+            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
+        >
             <div class="grid gap-4 md:grid-cols-4">
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <div class="text-sm text-muted-foreground">Gastos del mes</div>
-                    <div class="mt-2 text-2xl font-semibold">{{ kpis.mtd_expenses }}</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
+                    <div class="text-sm text-muted-foreground">
+                        Gastos del mes
+                    </div>
+                    <div class="mt-2 text-2xl font-semibold">
+                        {{ kpis.mtd_expenses }}
+                    </div>
                     <div
                         v-if="kpis.mtd_expenses_change_percent"
                         class="mt-1 text-xs text-muted-foreground"
                     >
-                        vs mes pasado: {{ kpis.mtd_expenses_change_amount ?? '—' }}
+                        vs mes pasado:
+                        {{ kpis.mtd_expenses_change_amount ?? '—' }}
                         <span class="px-1">·</span>
                         {{ kpis.mtd_expenses_change_percent }}
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <div class="text-sm text-muted-foreground">Ingresos del mes</div>
-                    <div class="mt-2 text-2xl font-semibold">{{ kpis.mtd_incomes }}</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
+                    <div class="text-sm text-muted-foreground">
+                        Ingresos del mes
+                    </div>
+                    <div class="mt-2 text-2xl font-semibold">
+                        {{ kpis.mtd_incomes }}
+                    </div>
                     <div
                         v-if="kpis.mtd_incomes_change_percent"
                         class="mt-1 text-xs text-muted-foreground"
                     >
-                        vs mes pasado: {{ kpis.mtd_incomes_change_amount ?? '—' }}
+                        vs mes pasado:
+                        {{ kpis.mtd_incomes_change_amount ?? '—' }}
                         <span class="px-1">·</span>
                         {{ kpis.mtd_incomes_change_percent }}
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <div class="text-sm text-muted-foreground">Balance del mes</div>
-                    <div class="mt-2 text-2xl font-semibold">{{ kpis.mtd_balance }}</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
+                    <div class="text-sm text-muted-foreground">
+                        Balance del mes
+                    </div>
+                    <div class="mt-2 text-2xl font-semibold">
+                        {{ kpis.mtd_balance }}
+                    </div>
                     <div
                         v-if="kpis.mtd_balance_change_percent"
                         class="mt-1 text-xs text-muted-foreground"
                     >
-                        vs mes pasado: {{ kpis.mtd_balance_change_amount ?? '—' }}
+                        vs mes pasado:
+                        {{ kpis.mtd_balance_change_amount ?? '—' }}
                         <span class="px-1">·</span>
                         {{ kpis.mtd_balance_change_percent }}
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
                     <div class="text-sm text-muted-foreground">Estado</div>
                     <div class="mt-2 text-sm text-muted-foreground">
                         KPIs calculados en tiempo real (MTD)
@@ -134,8 +159,12 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </div>
             </div>
 
-            <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                <div class="mb-3 text-sm font-medium">Gastos vs ingresos (mes en curso)</div>
+            <div
+                class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+            >
+                <div class="mb-3 text-sm font-medium">
+                    Gastos vs ingresos (mes en curso)
+                </div>
                 <div class="h-72">
                     <Line
                         :data="{
@@ -173,8 +202,12 @@ const breadcrumbs: BreadcrumbItem[] = [
             </div>
 
             <div class="grid gap-4 md:grid-cols-2">
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <div class="mb-3 text-sm font-medium">Top categorías del mes</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
+                    <div class="mb-3 text-sm font-medium">
+                        Top categorías del mes
+                    </div>
 
                     <div class="h-72">
                         <Bar
@@ -184,7 +217,8 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     {
                                         label: 'Gastos',
                                         data: top_expense_categories_chart.totals,
-                                        backgroundColor: 'rgba(239, 68, 68, 0.25)',
+                                        backgroundColor:
+                                            'rgba(239, 68, 68, 0.25)',
                                         borderColor: 'rgb(239, 68, 68)',
                                         borderWidth: 1,
                                     },
@@ -205,7 +239,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                     </div>
 
                     <div class="mt-4 rounded-lg border bg-card">
-                        <div class="border-b px-4 py-3 text-sm font-medium">Detalle</div>
+                        <div class="border-b px-4 py-3 text-sm font-medium">
+                            Detalle
+                        </div>
                         <div
                             v-if="top_expense_categories.length === 0"
                             class="px-4 py-6 text-sm text-muted-foreground"
@@ -219,15 +255,23 @@ const breadcrumbs: BreadcrumbItem[] = [
                                 class="flex items-center justify-between px-4 py-2 text-sm"
                             >
                                 <span>{{ row.category }}</span>
-                                <span class="text-muted-foreground">{{ row.percent ?? '—' }}</span>
-                                <span class="font-medium">{{ row.total_amount }}</span>
+                                <span class="text-muted-foreground">{{
+                                    row.percent ?? '—'
+                                }}</span>
+                                <span class="font-medium">{{
+                                    row.total_amount
+                                }}</span>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <div class="mb-3 text-sm font-medium">Distribución de gastos (mes)</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                >
+                    <div class="mb-3 text-sm font-medium">
+                        Distribución de gastos (mes)
+                    </div>
                     <div class="h-72">
                         <Doughnut
                             :data="{
@@ -263,7 +307,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </div>
             </div>
 
-            <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
+            <div
+                class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+            >
                 <div class="mb-3 text-sm font-medium">Tendencia 12 meses</div>
                 <div class="h-72">
                     <Line

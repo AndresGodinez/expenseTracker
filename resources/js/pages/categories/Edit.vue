@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import AppShell from '@/components/AppShell.vue'
-import Heading from '@/components/Heading.vue'
-import InputError from '@/components/InputError.vue'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Form, Head, Link } from '@inertiajs/vue3'
+import AppShell from '@/components/AppShell.vue';
+import Heading from '@/components/Heading.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Form, Head, Link } from '@inertiajs/vue3';
 
 type Category = {
-    id: number
-    name: string
-    update_url: string
-}
+    id: number;
+    name: string;
+    update_url: string;
+};
 
 defineProps<{
-    category: Category
-    index_url: string
-}>()
+    category: Category;
+    index_url: string;
+}>();
 </script>
 
 <template>
@@ -25,7 +25,10 @@ defineProps<{
 
         <div class="space-y-6">
             <div class="flex items-start justify-between gap-4">
-                <Heading title="Edit category" description="Update the category name" />
+                <Heading
+                    title="Edit category"
+                    description="Update the category name"
+                />
 
                 <Link :href="index_url" as="button">
                     <Button variant="secondary" size="sm">Back</Button>
@@ -53,7 +56,9 @@ defineProps<{
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <Button type="submit" :disabled="processing">Save</Button>
+                        <Button type="submit" :disabled="processing"
+                            >Save</Button
+                        >
                     </div>
                 </Form>
             </div>

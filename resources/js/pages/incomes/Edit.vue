@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import AppShell from '@/components/AppShell.vue'
-import Heading from '@/components/Heading.vue'
-import InputError from '@/components/InputError.vue'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Form, Head, Link } from '@inertiajs/vue3'
+import AppShell from '@/components/AppShell.vue';
+import Heading from '@/components/Heading.vue';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Form, Head, Link } from '@inertiajs/vue3';
 
 type Option = {
-    id: number
-    name: string
-}
+    id: number;
+    name: string;
+};
 
 type Income = {
-    id: number
-    name: string
-    amount: string
-    category_income_id: number
-    account_id: number
-    update_url: string
-}
+    id: number;
+    name: string;
+    amount: string;
+    category_income_id: number;
+    account_id: number;
+    update_url: string;
+};
 
 defineProps<{
-    income: Income
-    index_url: string
-    category_incomes: Option[]
-    accounts: Option[]
-}>()
+    income: Income;
+    index_url: string;
+    category_incomes: Option[];
+    accounts: Option[];
+}>();
 </script>
 
 <template>
@@ -35,7 +35,10 @@ defineProps<{
 
         <div class="space-y-6">
             <div class="flex items-start justify-between gap-4">
-                <Heading title="Edit income" description="Update the income name" />
+                <Heading
+                    title="Edit income"
+                    description="Update the income name"
+                />
 
                 <Link :href="index_url" as="button">
                     <Button variant="secondary" size="sm">Back</Button>
@@ -43,7 +46,12 @@ defineProps<{
             </div>
 
             <div class="rounded-lg border bg-card p-4">
-                <Form :action="income.update_url" method="put" class="space-y-4" v-slot="{ errors, processing }">
+                <Form
+                    :action="income.update_url"
+                    method="put"
+                    class="space-y-4"
+                    v-slot="{ errors, processing }"
+                >
                     <div class="grid gap-2">
                         <Label for="name">Name</Label>
                         <Input
@@ -81,7 +89,13 @@ defineProps<{
                             :value="income.category_income_id"
                             required
                         >
-                            <option v-for="c in category_incomes" :key="c.id" :value="c.id">{{ c.name }}</option>
+                            <option
+                                v-for="c in category_incomes"
+                                :key="c.id"
+                                :value="c.id"
+                            >
+                                {{ c.name }}
+                            </option>
                         </select>
                         <InputError :message="errors.category_income_id" />
                     </div>
@@ -95,13 +109,21 @@ defineProps<{
                             :value="income.account_id"
                             required
                         >
-                            <option v-for="a in accounts" :key="a.id" :value="a.id">{{ a.name }}</option>
+                            <option
+                                v-for="a in accounts"
+                                :key="a.id"
+                                :value="a.id"
+                            >
+                                {{ a.name }}
+                            </option>
                         </select>
                         <InputError :message="errors.account_id" />
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <Button type="submit" :disabled="processing">Save</Button>
+                        <Button type="submit" :disabled="processing"
+                            >Save</Button
+                        >
                     </div>
                 </Form>
             </div>

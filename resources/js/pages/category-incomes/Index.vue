@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import AppShell from '@/components/AppShell.vue'
-import Heading from '@/components/Heading.vue'
-import { Button } from '@/components/ui/button'
-import { Link } from '@inertiajs/vue3'
+import AppShell from '@/components/AppShell.vue';
+import Heading from '@/components/Heading.vue';
+import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/vue3';
 
 type CategoryIncome = {
-    id: number
-    name: string
-    edit_url: string
-    destroy_url: string
-}
+    id: number;
+    name: string;
+    edit_url: string;
+    destroy_url: string;
+};
 
 defineProps<{
-    category_incomes: CategoryIncome[]
-    create_url: string
-}>()
+    category_incomes: CategoryIncome[];
+    create_url: string;
+}>();
 </script>
 
 <template>
     <AppShell>
         <div class="space-y-6">
             <div class="flex items-start justify-between gap-4">
-                <Heading title="Income categories" description="Manage your income categories" />
+                <Heading
+                    title="Income categories"
+                    description="Manage your income categories"
+                />
 
                 <Link :href="create_url" as="button">
                     <Button size="sm">Create</Button>
@@ -29,7 +32,9 @@ defineProps<{
             </div>
 
             <div class="rounded-lg border bg-card">
-                <div class="border-b px-4 py-3 text-sm font-medium">Registered income categories</div>
+                <div class="border-b px-4 py-3 text-sm font-medium">
+                    Registered income categories
+                </div>
 
                 <div
                     v-if="category_incomes.length === 0"
@@ -48,11 +53,19 @@ defineProps<{
 
                         <div class="flex items-center gap-2">
                             <Link :href="categoryIncome.edit_url" as="button">
-                                <Button variant="secondary" size="sm">Edit</Button>
+                                <Button variant="secondary" size="sm"
+                                    >Edit</Button
+                                >
                             </Link>
 
-                            <Link :href="categoryIncome.destroy_url" method="delete" as="button">
-                                <Button variant="destructive" size="sm">Delete</Button>
+                            <Link
+                                :href="categoryIncome.destroy_url"
+                                method="delete"
+                                as="button"
+                            >
+                                <Button variant="destructive" size="sm"
+                                    >Delete</Button
+                                >
                             </Link>
                         </div>
                     </li>

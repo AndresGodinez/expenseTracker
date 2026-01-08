@@ -14,7 +14,14 @@ defineProps<{ class?: string }>();
         aria-label="Carvaz"
     >
         <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <linearGradient
+                id="g"
+                x1="0"
+                y1="0"
+                x2="48"
+                y2="48"
+                gradientUnits="userSpaceOnUse"
+            >
                 <stop stop-color="#2563EB" />
                 <stop offset="1" stop-color="#1D4ED8" />
             </linearGradient>
