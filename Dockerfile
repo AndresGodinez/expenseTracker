@@ -26,7 +26,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Instalar dependencias Laravel
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader -vvv
 
 # Generar key si no existe
 RUN php artisan key:generate || true
