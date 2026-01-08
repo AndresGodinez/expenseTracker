@@ -1,39 +1,43 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Dependencias del sistema
 RUN apk add --no-cache \
-    nginx \
+    bash \
     curl \
     git \
     unzip \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
+    libzip-dev \
     oniguruma-dev \
+    icu-dev
+
+# Extensiones PHP necesarias para Laravel
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    intl \
     zip
 
-# Extensiones PHP
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
-
-# Instalar Composer (FORMA OFICIAL)
+# Instalar Composer (oficial)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar código
+# Copiar composer files primero (mejor cache)
+COPY composer.json composer.lock ./
+
+# Instalar dependencias
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction
+
+# Copiar el resto del proyecto
 COPY . .
 
-# Instalar dependencias Laravel
-RUN composer install --no-dev --optimize-autoloader -vvv
+# Permisos Laravel
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Generar key si no existe
-RUN php artisan key:generate || true
-
-# Nginx
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80
-
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+EXPOSE 9000
+CMD ["php-fpm"]
