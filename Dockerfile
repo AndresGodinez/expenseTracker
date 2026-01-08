@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine
 
-# Dependencias del sistema
+# Paquetes del sistema
 RUN apk add --no-cache \
     bash \
     curl \
@@ -8,36 +8,42 @@ RUN apk add --no-cache \
     unzip \
     libzip-dev \
     oniguruma-dev \
-    icu-dev
+    icu-dev \
+    libxml2-dev
 
-# Extensiones PHP necesarias para Laravel
+# Extensiones PHP requeridas por Laravel 12
 RUN docker-php-ext-install \
+    bcmath \
+    ctype \
+    fileinfo \
+    mbstring \
     pdo \
     pdo_mysql \
-    mbstring \
-    intl \
-    zip
+    tokenizer \
+    xml \
+    zip \
+    intl
 
-# Instalar Composer (oficial)
+# Composer oficial
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar composer files primero (mejor cache)
+# Mejor cache
 COPY composer.json composer.lock ./
 
-# Instalar dependencias
+# Laravel 12 en CI (sin scripts)
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
-    --no-interaction
+    --no-interaction \
+    --no-scripts
 
-# Copiar el resto del proyecto
+# Código fuente
 COPY . .
 
 # Permisos Laravel
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 9000
 CMD ["php-fpm"]
