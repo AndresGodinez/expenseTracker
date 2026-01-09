@@ -1,10 +1,8 @@
 <script setup lang="ts">
-defineProps<{ class?: string }>();
 </script>
 
 <template>
     <svg
-        :class="class"
         width="220"
         height="48"
         viewBox="0 0 220 48"
