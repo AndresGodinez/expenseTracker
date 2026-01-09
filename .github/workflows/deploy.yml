@@ -45,4 +45,4 @@ jobs:
             cd ${{ env.VPS_PATH }}
             docker compose pull
             docker compose up -d
-            docker compose exec -T app php artisan migrate --force
+            docker compose exec app php artisan migrate --force
