@@ -46,7 +46,7 @@ defineProps<{
                     <h1
                         class="mt-4 text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl"
                     >
-                        Haz sentido de tu dinero. Cada mes.
+                        Dale sentido a tu dinero. Mes a mes.
                     </h1>
                     <p class="mt-4 text-lg leading-relaxed text-slate-600">
                         Registra gastos e ingresos, entiende tu balance y toma
