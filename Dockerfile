@@ -44,7 +44,7 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 
 EXPOSE 80
 
