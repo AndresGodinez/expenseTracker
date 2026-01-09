@@ -5,6 +5,7 @@ RUN apk add --no-cache \
     bash \
     curl \
     git \
+    nginx \
     unzip \
     libzip-dev \
     oniguruma-dev \
@@ -43,4 +44,8 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
-CMD ["php-fpm"]
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
