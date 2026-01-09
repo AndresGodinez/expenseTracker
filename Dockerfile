@@ -1,3 +1,13 @@
+FROM node:22-alpine AS assets
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
 FROM php:8.4-fpm-alpine
 
 # Paquetes del sistema necesarios
@@ -39,6 +49,8 @@ RUN composer install \
 
 # Código fuente
 COPY . .
+
+COPY --from=assets /app/public/build /var/www/html/public/build
 
 # Permisos Laravel
 RUN chown -R www-data:www-data /var/www/html \
