@@ -2,6 +2,8 @@ FROM node:22-alpine AS assets
 
 WORKDIR /app
 
+ENV WAYFINDER=0
+
 COPY package.json package-lock.json ./
 RUN npm ci
 
